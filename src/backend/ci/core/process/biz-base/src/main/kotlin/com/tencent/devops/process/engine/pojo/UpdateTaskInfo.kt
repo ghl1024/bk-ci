@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 /*
  * Tencent is pleased to support the open source community by making BK-CI 蓝鲸持续集成平台 available.
  *
@@ -27,32 +25,16 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-plugins {
-    kotlin
-    id("com.github.johnrengelman.shadow")
-    application
-}
+package com.tencent.devops.process.engine.pojo
 
-tasks {
-    getByName<Jar>("jar") {
-        from("src/main/resources") {
-            include("*.*")
-        }
+import com.tencent.devops.common.pipeline.enums.BuildStatus
+import java.time.LocalDateTime
 
-        manifest {
-            attributes(mapOf("WorkerAgent-Version" to project.version))
-        }
-    }
-
-    named<ShadowJar>("shadowJar") {
-        mergeServiceFiles()
-        destinationDirectory.set(File("${rootDir}/release"))
-        archiveClassifier.set("")
-        archiveVersion.set("")
-        isZip64 = true
-    }
-
-    getByName("installDist") {
-        enabled = false
-    }
-}
+data class UpdateTaskInfo(
+    val taskStatus: BuildStatus? = null, // 构建状态
+    val starter: String? = null, // 启动人
+    val approver: String? = null, // 审批人
+    val startTime: LocalDateTime? = null, // 开始时间
+    val endTime: LocalDateTime? = null, // 结束时间
+    val totalTime: Long? = null // 耗费时间
+)
